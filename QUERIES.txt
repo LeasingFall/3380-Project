@@ -1,0 +1,26 @@
+List all drivers involved in collisions who were also involved in traffic violations.
+QI SQL: Select distinct PID from Driver natural join TrafficViolations natura join Collision;
+
+What are the top [number] type of cars that most often get i nto collisions?
+etc., that appear frequently in car collisions. The analyst can specify the top number of car
+types they want.
+Q2 SQL: Select BodyType, Make, Model, Year from Vehicle natural join collisions Group By
+BodyType, Make, Model, Year Order By count (CID) desc limit
+The user gets to pick which injuty severity they want to get data from, Once they select
+Which injury severity. we list the top [number) type Of collisions associated with that injury
+severity. An analyst may want to know if people get injured more severely if they are rear
+ended, t-boned or face a head on collision.
+Q3 SQL: Select distinct CollisionType, injurySeverity from Collision join Driver on
+Collision.PlD = Driver-PID join RelatedWith on Collision-CID = RelatedWJth.ClD join
+NonMotorist on RelatedWith. PID NonMotorist.PlD where injurySeverity ? Group By
+injurySeverity, CollisionType Order By count(Collision.ClD) desc li mit ?;
+What were the top (number) non-motorist movements/actions (i.e: standing, walking etc.)
+at the time of the collision? (non-motorist types: pedestrian, cyclist)
+An analyst may want to know if the actions of the pedestrian/cyclist put themselves into
+positions that cause collisions.
+Q4 SQL: Select distinct actions, movement from Collision natural join RelatedWith natural
+join NonMototrist Group By actions, movement Order By count(CoUision.ClD) desc limit
+Find the number of collisions on each street (i.e. street name).
+An analyst may want to know if a road gets more collisions on it tha n others.
+Q5 SQL: Select roadName, count(Collision.ClD) as num from Collision natural join Location
+Group By roadName Order By num desc
