@@ -188,11 +188,12 @@ class MyDatabase {
 
     //------------- Add Queries Here ----------------
 
-	public void Query1() {
+	public void driversInCrash(int PID) {
 		// TODO!
+
 	}
 
-	public void Query2() {
+	public void typeCarCollisions(int top) {
         // TODO!
 	}
 
