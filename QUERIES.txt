@@ -1,26 +1,83 @@
 List all drivers involved in collisions who were also involved in traffic violations.
-QI SQL: Select distinct PID from Driver natural join TrafficViolations natura join Collision;
+An analyst may want to know if drivers with more traffic violations get into more collisions.
+QI SQL: Select distinct PID from Driver natural join TrafficVioIations natural join Collision;
 
-What are the top [number] type of cars that most often get i nto collisions?
+What are the top [number] type of cars that most often get into collisions?
+An analyst may want to know if there are characteristics of these cars, make, model, year,
 etc., that appear frequently in car collisions. The analyst can specify the top number of car
 types they want.
 Q2 SQL: Select BodyType, Make, Model, Year from Vehicle natural join collisions Group By
-BodyType, Make, Model, Year Order By count (CID) desc limit
-The user gets to pick which injuty severity they want to get data from, Once they select
-Which injury severity. we list the top [number) type Of collisions associated with that injury
+BodyType, Make, Model, Year Order By count (CID) desc limit ?;
+
+The user gets to pick which injury severity they want to get data from. Once they select
+which injury severity, we list the top [number] type of collisions associated with that injury
 severity. An analyst may want to know if people get injured more severely if they are rear
 ended, t-boned or face a head on collision.
 Q3 SQL: Select distinct CollisionType, injurySeverity from Collision join Driver on
-Collision.PlD = Driver-PID join RelatedWith on Collision-CID = RelatedWJth.ClD join
-NonMotorist on RelatedWith. PID NonMotorist.PlD where injurySeverity ? Group By
-injurySeverity, CollisionType Order By count(Collision.ClD) desc li mit ?;
-What were the top (number) non-motorist movements/actions (i.e: standing, walking etc.)
+Collision.PlD = Driver.PlD join RelatedWith on Collision.ClD = RelatedWith.ClD join
+NonMotorist on RelatedWith. PID = NonMotorist.PlD where injurySeverity = ? Group By
+injurySeverity, CollisionType Order By count(Collision.ClD) desc limit ?;
+
+What were the top [number] non-motorist movements/actions (i.e: standing, walking etc.)
 at the time of the collision? (non-motorist types: pedestrian, cyclist)
 An analyst may want to know if the actions of the pedestrian/cyclist put themselves into
 positions that cause collisions.
 Q4 SQL: Select distinct actions, movement from Collision natural join RelatedWith natural
-join NonMototrist Group By actions, movement Order By count(CoUision.ClD) desc limit
+join NonMototrist Group By actions, movement Order By count(Collision.ClD) desc limit ?;
+
 Find the number of collisions on each street (i.e. street name).
-An analyst may want to know if a road gets more collisions on it tha n others.
+An analyst may want to know if a road gets more collisions on it than others.
 Q5 SQL: Select roadName, count(Collision.ClD) as num from Collision natural join Location
-Group By roadName Order By num desc
+Group By roadName Order By num desc;
+
+How many collisions involve more than two cars.
+An analyst may want to know that, if a collision occurs, is it likely that more than two cars
+are involved? E.g. a chain of rear end collisions.
+Q6 SQL: Select distinct reportNumber from Report naturaljoin Collision Group By
+reportNumber Having count(distinct Collision.VI D) > 2;
+
+How many collisions are there for each weather condition? An analyst may want to know
+how the weather affects the number of collisions that occur.
+Q7 SQL: Select distinct weather, count(Collision.ClD) from environmentalConditions
+natural join has natural join Location natural join Collision Group By weather;
+
+How many collisions are there for each lighting? An analyst may want to know how the
+lighting affects the number of collisions that occur.
+Q8 SQL: Select distinct light, count(Collision.ClD) from environmentalConditions natural
+join has natural join Location natural join Collision Group By light;
+
+How many collisions are there for each surface condition? An analyst may want to know
+how the road surface condition affects the number of collisions that occur.
+Q9 SQL: Select distinct surfaceCondition, count(Collision.ClD) from
+environmentalConditions natural join Has natural join Location natural join Collision Group
+By surfaceCondition;
+
+User inputs speed limit (i.e: 70 mph). Then, we find all collisions associated with that speed
+limit, and display collision type (i.e: rearend) and how many collisions there are for that type
+and the provided speed limit.
+An analyst wants to know the common collision type for that speed limit.
+Q1O SQL: Select distinct collisionType, count(Collision.ClD) as num where speedLimit = ?
+Group By collisionType Order By num desc;
+
+User picks what lighting they want to filter by. Then, we show all driver distractions for that
+lighting (i.e: dusk, daylight).
+An analyst may want to know the most common driver distraction for that lighting.
+Q11 SQL: select distractedBy from collisions natural join driver natural join location natural
+join has natural join environmentalConditions where environmentalConditions.light = ?;
+
+Number of collisions per month, for each month in a given [year].
+An analyst may want to know if there is a pattern of when these collisions occur in the
+year. They may want to ask, do certain seasons contain more collisions than other
+seasons?
+Q12 SQL: select month, count(collisionlD) as numCollisions from collisions grouped by
+month Order by month having year = ?;
+
+Collision reports for person [personName] between [date1] and [date2]. An analyst might
+want to know how many collisions a person has been in a certain time period, last month
+for example.
+Q13 SQL: SELECT * from collision where pid = ? and crashDate between ? and ?;
+
+Traffic Violations for person [personNameJ between [date1] and [date2J. An analyst might
+want to know how many traffic violations a person has over a certain time period, last
+month for example.
+Q14 SQL: SELECT * from TrafficViolations where pid = ? and crashDate between ? and ?;

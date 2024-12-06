@@ -188,19 +188,77 @@ class MyDatabase {
 
     //------------- Add Queries Here ----------------
 
+    //1
 	public void driversInCrash(int PID) {
 		// TODO!
 
 	}
 
+    //2
 	public void typeCarCollisions(int top) {
         // TODO!
 	}
 
-	public void Query3() {
+    //3
+	public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the function
 		// TODO!
 	}
 
-    //...
+    //4
+	public void nonMotoristActions(int top) {
+		// TODO!
+	}
+
+    //5
+	public void collisionsPerStreet(String streetName) { // Avoid injection 
+		// TODO!
+	}
+
+    //6
+    public void multipleCarCollisions() {
+        // TODO!
+    }
+
+    //7
+    public void weatherCollisions() {
+        // TODO!
+    }
+
+    //8
+    public void lightingCollisions() {
+        // TODO!
+    }
+
+    //9
+    public void surfaceCollisions() {
+        // TODO!
+    }
+
+    //10
+    public void collisionsPerSpeed(int speedLimit) {
+        // TODO!
+    }
+
+    //11
+    public void distractionsbyLighting(String lighting) { // Avoid injection
+        // TODO!
+    }
+
+    //12
+    public void collisionsPerMonth(int year) {
+        // TODO!
+    }
+
+    //13
+    public void collisionReport(int PID) {
+        // TODO!
+    }
+
+    //14
+    public void trafficViolations(int PID) {
+        // TODO!
+    }
+
+    
 }
 
