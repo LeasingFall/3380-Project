@@ -76,59 +76,112 @@ public class MontgomeryCrashesDB {
                 }
                 
                 // Commands
-                if (parts[0].equals("h")){ // help
-                    //printHelp();
-                    System.out.println("Placeholder");
-                }else if (parts[0].equals("tvc")) { // 1
-                    db.ViolationsAndCollisions();
-                }else if (parts[0].equals("typeCar")) { // 2
-                    try {
+                switch (parts[0]) { // Using switch expressions
+                    case "h" -> // help
+                        //printHelp();
+                        System.out.println("Placeholder");
+                    case "tvc" -> // 1
+                        db.ViolationsAndCollisions();
+                    case "typeCar" -> {
+                        // 2
+                        try {
+                            if (parts.length >= 2)
+                                db.typeCarCollisions(Integer.parseInt(arg));
+                            else
+                                System.out.println("Required an argument for this command!");
+                        } catch (NumberFormatException e) {
+                            System.out.println("top must be an integer");
+                        }
+                    }
+                    case "injury" -> {
+                        // 3
+                        try {
+                            if (parts.length >= 3 && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
+                                db.injuryByCollision(arg, Integer.parseInt(ar2));
+                            else
+                                System.out.println("Required an argument for this command");
+                        } catch (NumberFormatException e) {
+                            System.out.println("top must be an integer");
+                        }
+                    }
+                    case "nma" -> {
+                        // 4
+                        try {
+                            if (parts.length >= 2)
+                                db.nonMotoristActions(Integer.parseInt(arg));
+                            else
+                                System.out.println("Required an argument for this command!");
+                        } catch (NumberFormatException e) {
+                            System.out.println("top must be an integer");
+                        }
+                    }
+                    case "street" -> {
+                        // 5
                         if (parts.length >= 2)
-                            db.typeCarCollisions(Integer.parseInt(arg));
-                        else
-                            System.out.println("Required an argument for this command!");
-                    } catch (NumberFormatException e) {
-                        System.out.println("top must be an integer");
-                    } 
-                }else if (parts[0].equals("injury")) { // 3
-                    try {
-                        if (parts.length >= 3 && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
-                            db.injuryByCollision(arg, Integer.parseInt(ar2));
+                            db.collisionsPerStreet(arg);
                         else
                             System.out.println("Required an argument for this command");
-                    } catch (NumberFormatException e) {
-                        System.out.println("top must be an integer");
                     }
-                }else if (parts[0].equals("nma")) { // 4
-                    try {
-                        if (parts.length >= 2)
-                            db.nonMotoristActions(Integer.parseInt(arg));
-                        else
-                            System.out.println("Required an argument for this command!");
-                    } catch (NumberFormatException e) {
-                        System.out.println("top must be an integer");
+                    case "mc" -> // 6
+                        db.multipleCarCollisions();
+                    case "weather" -> // 7
+                        db.weatherCollisions();
+                    case "lighting" -> // 8
+                        db.lightingCollisions();
+                    case "surface" -> // 9
+                        db.surfaceCollisions();
+                    case "speed" -> {
+                        // 10
+                        try {
+                            if (parts.length >= 2)
+                                db.collisionsPerSpeed(Integer.parseInt(arg));
+                            else
+                                System.out.println("Required an argument for this command!");
+                        } catch (NumberFormatException e) {
+                            System.out.println("speed must be an integer");
+                        }
                     }
-                    
-                }else if (parts[0].equals("notsell")) {
-                    try {
+                    case "dbl" -> {
+                        // 11
                         if (parts.length >= 2)
-                            System.out.println("Placeholder");
-                           // db.whoDoesNotSell(arg);
+                            db.distractionsbyLighting(arg); // Injection handed internally
                         else
                             System.out.println("Required an argument for this command");
-                    } catch (Exception e) {
-                        System.out.println("id must be an integer");
                     }
-                }else if (parts[0].equals("mc")) {
-                    //db.mostCities();
-                }else if (parts[0].equals("notread")) {
-                    //db.ownBooks();
-                }else if (parts[0].equals("all")) {
-                    //db.readAll();
-                }else if (parts[0].equals("mr")) {
-                   // db.mostReadPerCountry();
-                }else{
-                    System.out.println("Type and enter h for help.");
+                    case "month" -> {
+                        // 12
+                        try {
+                            if (parts.length >= 2)
+                                db.collisionsPerMonth(Integer.parseInt(arg));
+                            else
+                                System.out.println("Required an argument for this command");
+                        } catch (NumberFormatException e) {
+                            System.out.println("year must be an integer");
+                        }
+                    }
+                    case "collisions" -> {
+                        // 13
+                        try {
+                            if (parts.length >= 2)
+                                db.collisionReport(Integer.parseInt(arg));
+                            else
+                                System.out.println("Required an argument for this command");
+                        } catch (NumberFormatException e) {
+                            System.out.println("pid must be an integer");
+                        }
+                    }
+                    case "violations" -> {
+                        // 14
+                        try {
+                            if (parts.length >= 2)
+                                db.trafficViolations(Integer.parseInt(arg));
+                            else
+                                System.out.println("Required an argument for this command");
+                        } catch (NumberFormatException e) {
+                            System.out.println("pid must be an integer");
+                        }
+                    }
+                    default -> System.out.println("Type and enter h for help.");
                 }
 
                 System.out.print("db > ");
