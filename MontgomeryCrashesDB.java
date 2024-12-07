@@ -65,25 +65,26 @@ public class MontgomeryCrashesDB {
             String arg = "";
             String ar2 = "";
             String ar3 = "";
-
+            
             while (line != null && !line.equals("q")) {
                 //Get arguments
                 parts = line.split("\\s+");
-                if (parts.length() = 2){
+                if (parts.length = 2){
                     arg = parts[1];
                 }
-                if (parts.length() = 3){
+                if (parts.length = 3){
                     ar2 = parts[2];
                 }
-                if (parts.length() = 4){
+                if (parts.length = 4){
                     ar3 = parts[3];
                 }
                 
                 // Commands
                 if (parts[0].equals("h")){
-                    printHelp();
+                    //printHelp();
+                    System.out.println("Placeholder");
                 }else if (parts[0].equals("mp")) {
-                    db.Query1();
+                    //db.Query1();
                 }else if (parts[0].equals("s")) {
                     if (parts.length >= 2)
                         db.Query1();
@@ -92,7 +93,8 @@ public class MontgomeryCrashesDB {
                 }else if (parts[0].equals("l")) {
                     try {
                         if (parts.length >= 2)
-                            db.lookupByID(arg);
+                        System.out.println("Placeholder");
+                            //db.lookupByID(arg);
                         else
                             System.out.println("Require an argument for this command");
                     } catch (Exception e) {
@@ -101,7 +103,8 @@ public class MontgomeryCrashesDB {
                 }else if (parts[0].equals("sell")) {
                     try {
                         if (parts.length >= 2)
-                            db.lookupWhoSells(arg);
+                            System.out.println("Placeholder");
+                            //db.lookupWhoSells(arg);
                         else
                             System.out.println("Require an argument for this command");
                     } catch (Exception e) {
@@ -110,20 +113,21 @@ public class MontgomeryCrashesDB {
                 }else if (parts[0].equals("notsell")) {
                     try {
                         if (parts.length >= 2)
-                            db.whoDoesNotSell(arg);
+                            System.out.println("Placeholder");
+                           // db.whoDoesNotSell(arg);
                         else
                             System.out.println("Require an argument for this command");
                     } catch (Exception e) {
                         System.out.println("id must be an integer");
                     }
                 }else if (parts[0].equals("mc")) {
-                    db.mostCities();
+                    //db.mostCities();
                 }else if (parts[0].equals("notread")) {
-                    db.ownBooks();
+                    //db.ownBooks();
                 }else if (parts[0].equals("all")) {
-                    db.readAll();
+                    //db.readAll();
                 }else if (parts[0].equals("mr")) {
-                    db.mostReadPerCountry();
+                   // db.mostReadPerCountry();
                 }else{
                     System.out.println("Type and enter h for help.");
                 }
@@ -144,75 +148,76 @@ public class MontgomeryCrashesDB {
 }
 
 class MyDatabase {
-	private Connection connection;
+    private Connection connection;
 
-	public MyDatabase(String initScript, Connection c) {
-		connection = null;
-		try {
-			connection = c;
+    public MyDatabase(String initScript, Connection c) {
+        connection = null;
+        try {
+            connection = c;
 
-			System.out.println("Connection to MS SQL has been established.");
+            System.out.println("Connection to MS SQL has been established.");
 
-			if (initScript != null)
-				this.loadData(initScript);
+            if (initScript != null)
+                this.loadData(initScript);
 
-		} catch (SQLException e) {
-			System.out.println(e.getMessage());
-			System.exit(1);
-		} catch (IOException fnf) {
-			System.out.println(fnf.getMessage());
-			System.exit(2);
-		}
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+            System.exit(1);
+        } catch (IOException fnf) {
+            System.out.println(fnf.getMessage());
+            System.exit(2);
+        }
 
-	}
+    }
 
-	public void loadData(String script) throws IOException, SQLException {
-		BufferedReader reader = new BufferedReader(new FileReader(script));
-		String line = reader.readLine();
-		// assumes each query is its own line
-		while (line != null) {
-			System.out.println(line);
-			this.connection.createStatement().execute(line);
-			line = reader.readLine();
-		}
-	}
+    public void loadData(String script) throws IOException, SQLException {
+        BufferedReader reader = new BufferedReader(new FileReader(script));
+        String line = reader.readLine();
+        // assumes each query is its own line
+        while (line != null) {
+            System.out.println(line);
+            this.connection.createStatement().execute(line);
+            line = reader.readLine();
+        }
+    }
 
-	public void shutdown() {
-		try {
-            loadData("MontgomeryCrashes.sql"); //Replace quotes with an sql file to delete entire database
-			connection.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+    public void shutdown() {
+        try {
+            loadData("MontgomeryCrashes.sql"); // Replace quotes with an sql file to delete entire database
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     //------------- Add Queries Here ----------------
 
-    //1
-	public void driversInCrash(int PID) {
-		// TODO!
+      //1
+    public void driversInCrash(int PID) {
+      // TODO!
 
-	}
+    }
 
-    //2
-	public void typeCarCollisions(int top) {
-        // TODO!
-	}
+      //2
+    public void typeCarCollisions(int top) {
+          // TODO!
+    }
 
-    //3
-	public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the function
-		// TODO!
-	}
+=======
+      //3
+    public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the function
+      // TODO!
+    }
 
-    //4
-	public void nonMotoristActions(int top) {
-		// TODO!
-	}
+      //4
+    public void nonMotoristActions(int top) {
+      // TODO!
+    }
 
-    //5
-	public void collisionsPerStreet(String streetName) { // Avoid injection 
-		// TODO!
-	}
+      //5
+    public void collisionsPerStreet(String streetName) { // Avoid injection 
+      // TODO!
+    }
 
     //6
     public void multipleCarCollisions() {
@@ -262,3 +267,5 @@ class MyDatabase {
     
 }
 
+    // ...
+}
