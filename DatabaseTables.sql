@@ -11,7 +11,7 @@ drop table if exists vehicle;
 drop table if exists driver;
 
 create table driver (
-    "pid" INTEGER,
+    "pid" varchar(255),
     "injurySeverity" TEXT,
     "atFault" TEXT,
     "substanceAbuse" TEXT,
@@ -20,7 +20,7 @@ create table driver (
 );
 
 create table vehicle (
-    "vid" INTEGER,
+    "vid" varchar(255),
     "make" TEXT,
     "model" TEXT,
     "year" INTEGER,
@@ -42,13 +42,13 @@ create table location (
 );
 
 create table trafficViolations (
-    "seqid" INTEGER,
+    "seqid" varchar(255),
     "date" INTEGER, -- Check DATE type option format: 'YYYY-MM-DD' and > < = works on this 
     "time" INTEGER,
     "description" TEXT,
     "outcome" TEXT,
-    "vid" INTEGER,
-    "pid" INTEGER,
+    "vid" varchar(255),
+    "pid" varchar(255),
     "longitude" DECIMAL(10,8),
     "latitude" DECIMAL(10,8),
     PRIMARY KEY ("seqid"),
@@ -58,7 +58,7 @@ create table trafficViolations (
 );
 
 create table nonMotorists (
-    "pid" INTEGER PRIMARY KEY,
+    "pid" varchar(255) PRIMARY KEY,
     "type" TEXT,
     "actions" TEXT,
     "movement" TEXT,
@@ -75,20 +75,21 @@ create table environmentalConditions (
 );
 
 create table report (
-    "reportNumber" INTEGER,
+    "reportNumber" varchar(255),
     "reportType" TEXT,
     PRIMARY KEY ("reportNumber") 
 );
 
+-- on here
 create table collision (
     "cid" INTEGER PRIMARY KEY IDENTITY(1,1),
     "crashDate" INTEGER,
     "crashTime" INTEGER,
     "longitude" DECIMAL(10,8),
     "latitude" DECIMAL(10,8),
-    "pid" INTEGER,
-    "vid" INTEGER,
-    "reportNumber" INTEGER,
+    "pid" varchar(255),
+    "vid" varchar(255),
+    "reportNumber" varchar(255),
     "firstImpactLocation" TEXT,
     "damageExtent" TEXT,
     "collisionType" TEXT,
@@ -107,15 +108,16 @@ create table has ( -- between environmental conditions and location
 	FOREIGN KEY ("latitude", "longitude") REFERENCES "location"("latitude", "longitude")
 );
 
+--
 create table drives (
-    "pid" INTEGER,
-    "vid" INTEGER,
+    "pid" varchar(255),
+    "vid" varchar(255),
     FOREIGN KEY ("pid") REFERENCES "driver"("pid"),
     FOREIGN KEY ("vid") REFERENCES "vehicle"("vid")
 );
 
 create table relatedWith ( -- Between nonMotorist and collisions
-    "pid" INTEGER,
+    "pid" varchar(255),
     "cid" INTEGER,
     PRIMARY KEY ("cid", "pid"),
     FOREIGN KEY("cid") REFERENCES "collision"("cid"),
