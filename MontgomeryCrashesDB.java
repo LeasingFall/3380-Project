@@ -17,6 +17,7 @@ public class MontgomeryCrashesDB {
 
         Properties prop = new Properties();
         String fileName = "auth.cfg";
+        System.out.println("hello world");
         try {
             FileInputStream configFile = new FileInputStream(fileName);
             prop.load(configFile);
@@ -31,27 +32,25 @@ public class MontgomeryCrashesDB {
         String username = (prop.getProperty("username"));
         String password = (prop.getProperty("password"));
 
-        if (username == null || password == null){
+        if (username == null || password == null) {
             System.out.println("Username or password not provided.");
             System.exit(1);
         }
 
-        String connectionUrl =
-                "jdbc:sqlserver://uranium.cs.umanitoba.ca:1433;"
+        String connectionUrl = "jdbc:sqlserver://uranium.cs.umanitoba.ca:1433;"
                 + "database=cs3380;"
                 + "user=" + username + ";"
-                + "password="+ password +";"
+                + "password=" + password + ";"
                 + "encrypt=false;"
                 + "trustServerCertificate=false;"
                 + "loginTimeout=30;";
 
-        //ResultSet resultSet = null;
-
-
+        // ResultSet resultSet = null;
 
         try (Connection connection = DriverManager.getConnection(connectionUrl)) {
             // Statement statement = connection.createStatement();
-            MyDatabase db = new MyDatabase("MontgomeryCrashes.sql", connection); //Replace quotes with an sql file to fill entire database
+            MyDatabase db = new MyDatabase("MontgomeryCrashes.sql", connection); // Replace quotes with an sql file to
+                                                                                 // fill entire database
 
             Scanner console = new Scanner(System.in);
             System.out.print("Welcome! Type h for help. ");
@@ -61,24 +60,24 @@ public class MontgomeryCrashesDB {
             String arg = "";
             String ar2 = "";
             String ar3 = "";
-            
+
             while (line != null && !line.equals("q")) {
-                //Get arguments
+                // Get arguments
                 parts = line.split("\\s+");
-                if (parts.length == 2){
+                if (parts.length == 2) {
                     arg = parts[1];
                 }
-                if (parts.length == 3){
+                if (parts.length == 3) {
                     ar2 = parts[2];
                 }
-                if (parts.length == 4){
+                if (parts.length == 4) {
                     ar3 = parts[3];
                 }
-                
+
                 // Commands
                 switch (parts[0]) { // Using switch expressions
                     case "h" -> // help
-                        //printHelp();
+                        // printHelp();
                         System.out.println("Placeholder");
                     case "tvc" -> // 1
                         db.ViolationsAndCollisions();
@@ -96,7 +95,8 @@ public class MontgomeryCrashesDB {
                     case "injury" -> {
                         // 3
                         try {
-                            if (parts.length >= 3 && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
+                            if (parts.length >= 3
+                                    && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
                                 db.injuryByCollision(arg, Integer.parseInt(ar2));
                             else
                                 System.out.println("Required an argument for this command");
@@ -190,9 +190,8 @@ public class MontgomeryCrashesDB {
 
             console.close();
             db.shutdown();
-            
-        }
-        catch (SQLException e) {
+
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -242,78 +241,78 @@ class MyDatabase {
         }
     }
 
-    //------------- Add Queries Here ----------------
+    // ------------- Add Queries Here ----------------
 
-      //1
+    // 1
     public void ViolationsAndCollisions() {
-      // TODO!
+        // TODO!
 
     }
 
-      //2
+    // 2
     public void typeCarCollisions(int top) {
-          // TODO!
+        // TODO!
     }
 
-      //3
-    public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the function
-      // TODO!
+    // 3
+    public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the
+                                                              // function
+        // TODO!
     }
 
-      //4
+    // 4
     public void nonMotoristActions(int top) {
-      // TODO!
+        // TODO!
     }
 
-      //5
-    public void collisionsPerStreet(String streetName) { // Avoid injection 
-      // TODO!
+    // 5
+    public void collisionsPerStreet(String streetName) { // Avoid injection
+        // TODO!
     }
 
-    //6
+    // 6
     public void multipleCarCollisions() {
         // TODO!
     }
 
-    //7
+    // 7
     public void weatherCollisions() {
         // TODO!
     }
 
-    //8
+    // 8
     public void lightingCollisions() {
         // TODO!
     }
 
-    //9
+    // 9
     public void surfaceCollisions() {
         // TODO!
     }
 
-    //10
+    // 10
     public void collisionsPerSpeed(int speedLimit) {
         // TODO!
     }
 
-    //11
+    // 11
     public void distractionsbyLighting(String lighting) { // Avoid injection
         // TODO!
     }
 
-    //12
+    // 12
     public void collisionsPerMonth(int year) {
         // TODO!
     }
 
-    //13
+    // 13
     public void collisionReport(int PID) {
         // TODO!
     }
 
-    //14
+    // 14
     public void trafficViolations(int PID) {
         // TODO!
     }
 
-    
 }
