@@ -94,6 +94,7 @@ create table collision (
     "collisionType" TEXT,
     FOREIGN KEY ("latitude", "longitude") REFERENCES "location"("latitude", "longitude"),
 	FOREIGN KEY("reportNumber") REFERENCES "report"("reportNumber"),
+    FOREIGN KEY("vid") REFERENCES "vehicle"("vid"),
 	FOREIGN KEY("pid") REFERENCES "driver"("pid")
 );
 
