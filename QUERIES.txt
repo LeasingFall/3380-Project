@@ -1,6 +1,6 @@
 List all drivers involved in collisions who were also involved in traffic violations.
 An analyst may want to know if drivers with more traffic violations get into more collisions.
-QI SQL: Select distinct PID from Driver natural join TrafficVioIations natural join Collision;
+Q1 SQL: Select distinct PID from Driver natural join TrafficVioIations natural join Collision;
 
 What are the top [number] type of cars that most often get into collisions?
 An analyst may want to know if there are characteristics of these cars, make, model, year,
