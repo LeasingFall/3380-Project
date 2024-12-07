@@ -5,13 +5,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.Properties;
 import java.util.Scanner;
-import java.io.File;
-import java.sql.PreparedStatement;
 
 public class MontgomeryCrashesDB {
 
@@ -69,54 +65,57 @@ public class MontgomeryCrashesDB {
             while (line != null && !line.equals("q")) {
                 //Get arguments
                 parts = line.split("\\s+");
-                if (parts.length = 2){
+                if (parts.length == 2){
                     arg = parts[1];
                 }
-                if (parts.length = 3){
+                if (parts.length == 3){
                     ar2 = parts[2];
                 }
-                if (parts.length = 4){
+                if (parts.length == 4){
                     ar3 = parts[3];
                 }
                 
                 // Commands
-                if (parts[0].equals("h")){
+                if (parts[0].equals("h")){ // help
                     //printHelp();
                     System.out.println("Placeholder");
-                }else if (parts[0].equals("mp")) {
-                    //db.Query1();
-                }else if (parts[0].equals("s")) {
-                    if (parts.length >= 2)
-                        db.Query1();
-                    else
-                        System.out.println("Require an argument for this command");
-                }else if (parts[0].equals("l")) {
+                }else if (parts[0].equals("tvc")) { // 1
+                    db.ViolationsAndCollisions();
+                }else if (parts[0].equals("typeCar")) { // 2
                     try {
                         if (parts.length >= 2)
-                        System.out.println("Placeholder");
-                            //db.lookupByID(arg);
+                            db.typeCarCollisions(Integer.parseInt(arg));
                         else
-                            System.out.println("Require an argument for this command");
-                    } catch (Exception e) {
-                        System.out.println("id must be an integer");
+                            System.out.println("Required an argument for this command!");
+                    } catch (NumberFormatException e) {
+                        System.out.println("top must be an integer");
+                    } 
+                }else if (parts[0].equals("injury")) { // 3
+                    try {
+                        if (parts.length >= 3 && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
+                            db.injuryByCollision(arg, Integer.parseInt(ar2));
+                        else
+                            System.out.println("Required an argument for this command");
+                    } catch (NumberFormatException e) {
+                        System.out.println("top must be an integer");
                     }
-                }else if (parts[0].equals("sell")) {
+                }else if (parts[0].equals("nma")) { // 4
                     try {
                         if (parts.length >= 2)
-                            System.out.println("Placeholder");
-                            //db.lookupWhoSells(arg);
+                            db.nonMotoristActions(Integer.parseInt(arg));
                         else
-                            System.out.println("Require an argument for this command");
-                    } catch (Exception e) {
-                        System.out.println("id must be an integer");
+                            System.out.println("Required an argument for this command!");
+                    } catch (NumberFormatException e) {
+                        System.out.println("top must be an integer");
                     }
+                    
                 }else if (parts[0].equals("notsell")) {
                     try {
                         if (parts.length >= 2)
                             System.out.println("Placeholder");
                            // db.whoDoesNotSell(arg);
                         else
-                            System.out.println("Require an argument for this command");
+                            System.out.println("Required an argument for this command");
                     } catch (Exception e) {
                         System.out.println("id must be an integer");
                     }
@@ -193,7 +192,7 @@ class MyDatabase {
     //------------- Add Queries Here ----------------
 
       //1
-    public void driversInCrash(int PID) {
+    public void ViolationsAndCollisions() {
       // TODO!
 
     }
@@ -203,7 +202,6 @@ class MyDatabase {
           // TODO!
     }
 
-=======
       //3
     public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the function
       // TODO!
@@ -265,7 +263,4 @@ class MyDatabase {
     }
 
     
-}
-
-    // ...
 }
