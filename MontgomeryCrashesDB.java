@@ -5,12 +5,11 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Scanner;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.PreparedStatement;
 
 public class MontgomeryCrashesDB {
 
@@ -72,7 +71,6 @@ public class MontgomeryCrashesDB {
                     String[] parts;
                     String arg = "";
                     String ar2 = "";
-                    String ar3 = "";
                     while (line != null && !line.equals("q")) {
                         // Get arguments
                         parts = line.split("\\s+");
@@ -81,9 +79,6 @@ public class MontgomeryCrashesDB {
                         }
                         if (parts.length == 3) {
                             ar2 = parts[2];
-                        }
-                        if (parts.length == 4) {
-                            ar3 = parts[3];
                         }
 
                         // Commands
@@ -94,7 +89,7 @@ public class MontgomeryCrashesDB {
                         } else if (parts[0].equals("typeCar")) { // 2
                             try {
                                 if (parts.length >= 2){
-                                    if(Integer.parseInt(arg) <= 30 && Integer.parseInt(arg) >= 1){
+                                    if(Integer.parseInt(arg) <= 30 && Integer.parseInt(arg) >= 1){ // Validate between 1 and 30
                                         db.typeCarCollisions(Integer.parseInt(arg)); 
                                     } else {
                                         db.typeCarCollisions(defaultTop); 
@@ -106,18 +101,25 @@ public class MontgomeryCrashesDB {
                             }
                         } else if (parts[0].equals("injury")) { // 3
                             try {
-                                if (parts.length >= 3 && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
+                                if(parts.length < 3){
+                                    System.out.println("Required an argument for this command (not enough arguments)");
+                                } else if(!(arg.equals("FATAL INJURY") || arg.equals("NO APPARENT INJURY") || arg.equals("POSSIBLE INJURY") || arg.equals("SUSPECTED MINOR INJURY") || arg.equals("SUSPECTED SERIOUS INJURY"))){
+                                    System.out.println("Invalid injury type!");
+                                } else { // Right length and a correct injury type has been selected
                                     db.injuryByCollision(arg, Integer.parseInt(ar2));
-                                else
-                                    System.out.println("Required an argument for this command");
+                                }
                             } catch (NumberFormatException e) {
                                 System.out.println("top must be an integer");
                             }
                         } else if (parts[0].equals("nma")) { // 4
                             try {
-                                if (parts.length >= 2)
-                                    db.nonMotoristActions(Integer.parseInt(arg));
-                                else
+                                if (parts.length >= 2){
+                                    if(Integer.parseInt(arg) <= 30 && Integer.parseInt(arg) >= 1){ // Validate between 1 and 30
+                                        db.nonMotoristActions(Integer.parseInt(arg));
+                                    } else {
+                                        db.nonMotoristActions(defaultTop); 
+                                    }
+                                }else
                                     System.out.println("Required an argument for this command!");
                             } catch (NumberFormatException e) {
                                 System.out.println("top must be an integer");
@@ -134,42 +136,48 @@ public class MontgomeryCrashesDB {
                             db.surfaceCollisions();
                         } else if (parts[0].equals("speed")) { // 10
                             try {
-                                if (parts.length >= 2)
-                                    db.collisionsPerSpeed(Integer.parseInt(arg));
-                                else
+                                if (parts.length >= 2){
+                                    if(Integer.parseInt(arg) >= 1 && Integer.parseInt(arg) <= 75 && Integer.parseInt(arg) % 5 == 0){ // Validate between 1 and 30
+                                        db.collisionsPerSpeed(Integer.parseInt(arg));
+                                    } else {
+                                        System.out.println("Invalid speed! (type h for more info)");
+                                    }
+                                }else
                                     System.out.println("Required an argument for this command!");
                             } catch (NumberFormatException e) {
                                 System.out.println("speed must be an integer");
                             }
                         } else if (parts[0].equals("dbl")) { // 11
-                            if (parts.length >= 2)
-                                db.distractionsbyLighting(arg);
-                            else
+                            if(parts.length < 2){
                                 System.out.println("Required an argument for this command");
+                            } else if (!(arg.equals("Dark - Lighted") || arg.equals("Dark - Not Lighted") || arg.equals("Dark - Unknown Lighting") || arg.equals("DARK UNKNOWN LIGHTING") || arg.equals("DARK LIGHTS ON") || arg.equals("DARK NO LIGHTS") || arg.equals("DAWN") || arg.equals("DAYLIGHT") || arg.equals("DUSK") || arg.equals("OTHER") || arg.equals("UNKNOWN"))){
+                                System.out.println("Invalid lighting type (type h for more info)");
+                            }else
+                                db.distractionsbyLighting(arg);
                         } else if (parts[0].equals("month")) { // 12
                             try {
-                                if (parts.length >= 2)
+                                if (parts.length >= 2 && Integer.parseInt(arg) >= 0) // Invalid years >=0 would just return empty 
                                     db.collisionsPerMonth(Integer.parseInt(arg));
                                 else
-                                    System.out.println("Required an argument for this command");
+                                    System.out.println("Required an argument for this command or invalid argument");
                             } catch (NumberFormatException e) {
                                 System.out.println("year must be an integer");
                             }
                         } else if (parts[0].equals("collisions")) { // 13
                             try {
-                                if (parts.length >= 2)
+                                if (parts.length >= 2 && Integer.parseInt(arg) >= 0)
                                     db.collisionReport(Integer.parseInt(arg));
                                 else
-                                    System.out.println("Required an argument for this command");
+                                    System.out.println("Required an argument for this command or invalid argument");
                             } catch (NumberFormatException e) {
                                 System.out.println("pid must be an integer");
                             }
                         } else if (parts[0].equals("violations")) { // 14
                             try {
-                                if (parts.length >= 2)
+                                if (parts.length >= 2 && Integer.parseInt(arg) >= 0)
                                     db.trafficViolations(Integer.parseInt(arg));
                                 else
-                                    System.out.println("Required an argument for this command");
+                                    System.out.println("Required an argument for this command or invalid argument");
                             } catch (NumberFormatException e) {
                                 System.out.println("pid must be an integer");
                             }
@@ -197,32 +205,23 @@ public class MontgomeryCrashesDB {
     }
 
     public static void printPoliceHelp() {
-        System.out
-                .println("tvc - List all drivers involved in collisions who were also involved in traffic violations");
-        System.out.println(
-                "typeCar [top#(1-30)] - Lists the top [number] type of cars that most often get into collisions");
-        System.out.println(
-                "injury [top#(1-30)] - Lists the top [number] type of collisions associated with [injury severity]");
-        System.out.println(
-                "nma [top#(1-30)] - Lists the top [number] non-motorist movements/actions at the time of the collision");
+        System.out.println("tvc - List all drivers involved in collisions who were also involved in traffic violations");
+        System.out.println("typeCar [top#(1-30)] - Lists the top [number] type of cars that most often get into collisions");
+        System.out.println("injury [see below] [top#(1-30)] - Lists the top [number] type of collisions associated with [injury severity]");
+        System.out.println("\t['FATAL INJURY' / 'NO APPARENT INJURY' / 'POSSIBLE INJURY' / 'SUSPECTED MINOR INJURY' / 'SUSPECTED SERIOUS INJURY']");
+        System.out.println("nma [top#(1-30)] - Lists the top [number] non-motorist movements/actions at the time of the collision");
         System.out.println("street - Lists the number of collisions on each street");
         System.out.println("mc - Lists collisions involving more than two cars");
         System.out.println("weather - Lists collisions for each weather condition");
         System.out.println("lighting - Lists collisions for each lighting");
         System.out.println("surface - Lists collisions for each surface condition");
-        System.out.println(
-                "speed [0/5/10/.../75] - Lists all collisions with [speedLimit] and associated collision types, and number of collisions for that collision type under that [speedLimit] ");
+        System.out.println("speed [0/5/10/.../75] - Lists all collisions with [speedLimit] and associated collision types, and number of collisions for that collision type under that [speedLimit] ");
         System.out.println("dbl [see below] - Lists all driver distractions with [lighting]");
-        System.out.println(
-                "['Dark - Lighted' / 'Dark - Not Lighted' / 'Dark - Unknown Lighting' / 'DARK UNKNOWN LIGHTING' /\n 'DARK LIGHTS ON' / 'DARK NO LIGHTS' / 'DAWN' / 'DAYLIGHT' / 'DUSK' / 'OTHER' / 'UNKNOWN']");
+        System.out.println("\t['Dark - Lighted' / 'Dark - Not Lighted' / 'Dark - Unknown Lighting' / 'DARK UNKNOWN LIGHTING' /\n 'DARK LIGHTS ON' / 'DARK NO LIGHTS' / 'DAWN' / 'DAYLIGHT' / 'DUSK' / 'OTHER' / 'UNKNOWN']");
         System.out.println("month [year as YYYY] - Lists number of collisions for each month in a given [year]");
-        System.out.println(
-                "collisions [pid] - Lists collision reports for person [personName] between [date1] and [date2]");
-        System.out.println(
-                "violations [pid] - Lists Traffic Violations for person [personName] between [date1] and [date2]");
-        System.out.println("q - quit");
-        System.out.println();
-
+        System.out.println("collisions [pid] - Lists collision reports for person [personName] between [date1] and [date2]");
+        System.out.println("violations [pid] - Lists Traffic Violations for person [personName] between [date1] and [date2]");
+        System.out.println("q - quit\n");
     }
 }
 
