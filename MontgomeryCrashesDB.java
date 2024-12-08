@@ -53,7 +53,7 @@ public class MontgomeryCrashesDB {
         try (Connection connection = DriverManager.getConnection(connectionUrl)) {
             // Statement statement = connection.createStatement();
             MyDatabase db = new MyDatabase("MontgomeryCrashes.sql", connection); // Replace quotes with an sql file to
-                                                                                 // fill entire database
+                                                                                           // fill entire database
 
             Scanner console = new Scanner(System.in);
             String line = "";
@@ -65,9 +65,10 @@ public class MontgomeryCrashesDB {
                 line = console.nextLine();
 
                 if (line.equals("p")) { // Police System Login
-                    System.out.print("Welcome! Type h for help. ");
+                    System.out.print("Welcome to Montgomery's Police System! Type h for help.");
                     System.out.print("db > ");
                     line = console.nextLine();
+                    int defaultTop = 15;
                     String[] parts;
                     String arg = "";
                     String ar2 = "";
@@ -92,17 +93,20 @@ public class MontgomeryCrashesDB {
                             db.ViolationsAndCollisions();
                         } else if (parts[0].equals("typeCar")) { // 2
                             try {
-                                if (parts.length >= 2)
-                                    db.typeCarCollisions(Integer.parseInt(arg));
-                                else
+                                if (parts.length >= 2){
+                                    if(Integer.parseInt(arg) <= 30 && Integer.parseInt(arg) >= 1){
+                                        db.typeCarCollisions(Integer.parseInt(arg)); 
+                                    } else {
+                                        db.typeCarCollisions(defaultTop); 
+                                    }
+                                }else
                                     System.out.println("Required an argument for this command!");
                             } catch (NumberFormatException e) {
                                 System.out.println("top must be an integer");
                             }
                         } else if (parts[0].equals("injury")) { // 3
                             try {
-                                if (parts.length >= 3
-                                        && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
+                                if (parts.length >= 3 && (arg.equals("") || arg.equals("") || arg.equals("") || arg.equals("")))
                                     db.injuryByCollision(arg, Integer.parseInt(ar2));
                                 else
                                     System.out.println("Required an argument for this command");
