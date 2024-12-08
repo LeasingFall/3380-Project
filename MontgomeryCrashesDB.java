@@ -59,10 +59,11 @@ public class MontgomeryCrashesDB {
             String line = "";
             Boolean validLogin = false;
             while (!validLogin && !line.equals("q")) {
-                System.out.println("Welcome to Montgomery Police Record System!\nType u to login as a user or type p to login as a police.");
+                System.out.println(
+                        "Welcome to Montgomery Police Record System!\nType u to login as a user or type p to login as a police.");
                 System.out.print("db > ");
                 line = console.nextLine();
-    
+
                 if (line.equals("p")) { // Police System Login
                     System.out.print("Welcome! Type h for help. ");
                     System.out.print("db > ");
@@ -83,7 +84,7 @@ public class MontgomeryCrashesDB {
                         if (parts.length == 4) {
                             ar3 = parts[3];
                         }
-        
+
                         // Commands
                         if (parts[0].equals("h")) {
                             printPoliceHelp();
@@ -92,7 +93,7 @@ public class MontgomeryCrashesDB {
                         } else if (parts[0].equals("typeCar")) { // 2
                             try {
                                 if (parts.length >= 2)
-                                    db.typeCarCollisions(Integer.parseInt(arg)); 
+                                    db.typeCarCollisions(Integer.parseInt(arg));
                                 else
                                     System.out.println("Required an argument for this command!");
                             } catch (NumberFormatException e) {
@@ -118,7 +119,7 @@ public class MontgomeryCrashesDB {
                                 System.out.println("top must be an integer");
                             }
                         } else if (parts[0].equals("street")) { // 5
-                                db.collisionsPerStreet();
+                            db.collisionsPerStreet();
                         } else if (parts[0].equals("mc")) { // 6
                             db.multipleCarCollisions();
                         } else if (parts[0].equals("weather")) { // 7
@@ -171,7 +172,7 @@ public class MontgomeryCrashesDB {
                         } else {
                             System.out.println("Type and enter h for help.");
                         }
-        
+
                         System.out.print("db > ");
                         line = console.nextLine();
                     }
@@ -179,10 +180,9 @@ public class MontgomeryCrashesDB {
                 } else if (line.equals("u")) { // Public User
                     validLogin = true;
                 }
-    
+
             }
-            
-            
+
             console.close();
             db.shutdown();
 
@@ -190,25 +190,32 @@ public class MontgomeryCrashesDB {
             e.printStackTrace();
         }
 
-
     }
 
     public static void printPoliceHelp() {
-        System.out.println("tvc - List all drivers involved in collisions who were also involved in traffic violations");
-        System.out.println("typeCar [top#(1-30)] - Lists the top [number] type of cars that most often get into collisions");
-        System.out.println("injury [top#(1-30)] - Lists the top [number] type of collisions associated with [injury severity]");
-        System.out.println("nma [top#(1-30)] - Lists the top [number] non-motorist movements/actions at the time of the collision");
+        System.out
+                .println("tvc - List all drivers involved in collisions who were also involved in traffic violations");
+        System.out.println(
+                "typeCar [top#(1-30)] - Lists the top [number] type of cars that most often get into collisions");
+        System.out.println(
+                "injury [top#(1-30)] - Lists the top [number] type of collisions associated with [injury severity]");
+        System.out.println(
+                "nma [top#(1-30)] - Lists the top [number] non-motorist movements/actions at the time of the collision");
         System.out.println("street - Lists the number of collisions on each street");
         System.out.println("mc - Lists collisions involving more than two cars");
         System.out.println("weather - Lists collisions for each weather condition");
         System.out.println("lighting - Lists collisions for each lighting");
         System.out.println("surface - Lists collisions for each surface condition");
-        System.out.println("speed [0/5/10/.../75] - Lists all collisions with [speedLimit] and associated collision types, and number of collisions for that collision type under that [speedLimit] ");
+        System.out.println(
+                "speed [0/5/10/.../75] - Lists all collisions with [speedLimit] and associated collision types, and number of collisions for that collision type under that [speedLimit] ");
         System.out.println("dbl [see below] - Lists all driver distractions with [lighting]");
-        System.out.println("['Dark - Lighted' / 'Dark - Not Lighted' / 'Dark - Unknown Lighting' / 'DARK UNKNOWN LIGHTING' /\n 'DARK LIGHTS ON' / 'DARK NO LIGHTS' / 'DAWN' / 'DAYLIGHT' / 'DUSK' / 'OTHER' / 'UNKNOWN']");
+        System.out.println(
+                "['Dark - Lighted' / 'Dark - Not Lighted' / 'Dark - Unknown Lighting' / 'DARK UNKNOWN LIGHTING' /\n 'DARK LIGHTS ON' / 'DARK NO LIGHTS' / 'DAWN' / 'DAYLIGHT' / 'DUSK' / 'OTHER' / 'UNKNOWN']");
         System.out.println("month [year as YYYY] - Lists number of collisions for each month in a given [year]");
-        System.out.println("collisions [pid] - Lists collision reports for person [personName] between [date1] and [date2]");
-        System.out.println("violations [pid] - Lists Traffic Violations for person [personName] between [date1] and [date2]");
+        System.out.println(
+                "collisions [pid] - Lists collision reports for person [personName] between [date1] and [date2]");
+        System.out.println(
+                "violations [pid] - Lists Traffic Violations for person [personName] between [date1] and [date2]");
         System.out.println("q - quit");
         System.out.println();
 
@@ -361,7 +368,7 @@ class MyDatabase {
     }
 
     // 5
-    public void collisionsPerStreet() { 
+    public void collisionsPerStreet() {
         try {
             String sql = "select roadName, count(collision.CID) as numCollisions from collision natural join location group By roadName order by numCollisions desc limit 30;";
 
@@ -405,7 +412,7 @@ class MyDatabase {
         } catch (SQLException e) {
             e.printStackTrace(System.out);
         }
-        
+
     }
 
     // 7
@@ -513,7 +520,7 @@ class MyDatabase {
             String sql = "select distractedBy, count(collision.cid) as numCollisions from collision natural join driver natural join location natural join has natural join environmentalConditions where environmentalConditions.lightCondition = ? group by distractedBy desc;";
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setString(1,lighting);
+            statement.setString(1, lighting);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
@@ -537,7 +544,7 @@ class MyDatabase {
             String sql = "select month, count(collisionID) as numCollisions from collisions group by month order by numCollisions having year = ?;";
 
             PreparedStatement statement = connection.prepareStatement(sql);
-            statement.setInt(1,year);
+            statement.setInt(1, year);
             ResultSet resultSet = statement.executeQuery();
             while (resultSet.next()) {
 
@@ -557,11 +564,52 @@ class MyDatabase {
     // 13
     public void collisionReport(int PID) {
         // TODO!
+        try {
+            String sql = "select * from collision where pid = ? and crashDate between ? and ? limit 30; ";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, PID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "crashDate: " + resultSet.getString("crashDate") + "crashTime: "
+                                + resultSet.getString("crashTime") + " firstImpactLocation: "
+                                + resultSet.getString("firstImpactLocation") + " damageExtent: "
+                                + resultSet.getString("damageExtent") + " collisionType: "
+                                + resultSet.getString("collisionType") + " reportNumber: "
+                                + resultSet.getInt("reportNumber"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 14
     public void trafficViolations(int PID) {
         // TODO!
+        try {
+            String sql = "select * from trafficViolations where pid = ? and date between ? and ? limit 30; ";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, PID);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "date: " + resultSet.getString("date") + " description: " + resultSet.getString("description") + " outcome: " + resultSet.getString("outcome"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
 }
