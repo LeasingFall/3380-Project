@@ -122,7 +122,7 @@ public class TestingInterface {
         System.out.println(
                 "topnonmact - Lists the top [number] non-motorist movements/actions at the time of the collision");
         System.out.println("numcolsstreet - Lists the number of collisions on each street");
-        System.out.println("manycarcols - Lists collisions involving more than two cars");
+        System.out.println("manycarcols - Lists collisions involving more than two cars"); 
         System.out.println("weathercols - Lists collisions for each weather condition");
         System.out.println("lightingcols - Lists collisions for each lighting");
         System.out.println("surfacecols - Lists collisions for each surface condition");

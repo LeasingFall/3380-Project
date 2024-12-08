@@ -8,6 +8,9 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Properties;
 import java.util.Scanner;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.sql.PreparedStatement;
 
 public class MontgomeryCrashesDB {
 
@@ -269,63 +272,296 @@ class MyDatabase {
     // 1
     public void ViolationsAndCollisions() {
         // TODO!
+        try {
+
+            String sql = "Select distinct pid from driver natural join trafficViolations natural join collision limit 30;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()) {
+                System.out.println(resultSet.getInt("pid"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
 
     }
 
     // 2
     public void typeCarCollisions(int top) {
         // TODO!
+        try {
+            String sql = "Select bodyType, make, count(cid) as numCollisions from vehicle natural join collision group By bodyType,make order by numCollisions desc limit ?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, top);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "bodyType: " + resultSet.getString("bodyType") + "make: " + resultSet.getString("make")
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 3
     public void injuryByCollision(String severity, int top) { // Severity should be validated before passing to the
                                                               // function
         // TODO!
+
+        try {
+            String sql = "Select distinct collisionType, injurySeverity from collision join driver on collision.pid = Driver.pid join relatedWith on collision.CID = relatedWith.cid join nonMotorists on relatedWith.pid = nonMotorist.pid where injurySeverity = ? group By injurySeverity, collisionType order by count(collision.CID) desc limit ?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1, severity);
+            statement.setInt(2, top);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "collisionType: " + resultSet.getString("collisionType") + "injurySeverity: "
+                                + resultSet.getString("injurySeverity"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 4
     public void nonMotoristActions(int top) {
         // TODO!
+        try {
+            String sql = "select distinct actions, movement, count(collision.cid) as numCollisions from collision natural join relatedWith natural join nonMotorists group by actions,movement order by numCollisions desc limit ?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, top);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "actions: " + resultSet.getString("actions") + "movement: "
+                                + resultSet.getString("movement") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 5
     public void collisionsPerStreet(String streetName) { // Avoid injection
         // TODO!
+        try {
+            String sql = "select roadName, count(collision.CID) as numCollisions from collision natural join location group By roadName order by numCollisions desc limit 30;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "roadName: " + resultSet.getString("roadName") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 6
     public void multipleCarCollisions() {
         // TODO!
+        try {
+            String sql = "select distinct reportNumber, count(distinct collision.vid) as numCollisions from report natural join collision group by reportNumber having numCollisions > 2;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "reportNumber: " + resultSet.getString("reportNumber") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+        
     }
 
     // 7
     public void weatherCollisions() {
         // TODO!
+        try {
+            String sql = "select distinct weather, count(collision.CID) as numCollisions from environmentalConditions natural join has natural join location natural join collision group by weather; ";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "Weather: " + resultSet.getString("weather") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
     }
 
     // 8
     public void lightingCollisions() {
         // TODO!
+        try {
+            String sql = "select distinct lightCondition, count(collision.CID) as numCollisions from environmentalConditions natural join has natural join location natural join collision group by lightCondition;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "lightCondition: " + resultSet.getString("lightCondition") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 9
     public void surfaceCollisions() {
         // TODO!
+        try {
+            String sql = "select distinct surfaceCondition, count(collision.cid) as numCollisions from environmentalConditions natural join has natural join location natural join collision group by surfaceCondition; ";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "surfaceCondition: " + resultSet.getString("surfaceCondition") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 10
     public void collisionsPerSpeed(int speedLimit) {
         // TODO!
+        try {
+            String sql = "select distinct collisionType, count(collision.CID) as numCollisions where speedLimit = ? group by collisionType order by numCollisions desc;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1, speedLimit);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "collisionType: " + resultSet.getString("collisionType") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
+
     }
 
     // 11
     public void distractionsbyLighting(String lighting) { // Avoid injection
         // TODO!
+        try {
+            String sql = "select distractedBy, count(collision.cid) as numCollisions from collision natural join driver natural join location natural join has natural join environmentalConditions where environmentalConditions.lightCondition = ? group by distractedBy desc;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setString(1,lighting);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "distractedBy: " + resultSet.getString("distractedBy") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 12
     public void collisionsPerMonth(int year) {
         // TODO!
+        try {
+            String sql = "select month, count(collisionID) as numCollisions from collisions group by month order by numCollisions having year = ?;";
+
+            PreparedStatement statement = connection.prepareStatement(sql);
+            statement.setInt(1,year);
+            ResultSet resultSet = statement.executeQuery();
+            while (resultSet.next()) {
+
+                System.out.println(
+                        "month: " + resultSet.getString("month") + "numCollisions: "
+                                + resultSet.getInt("numCollisions"));
+
+            }
+            resultSet.close();
+            statement.close();
+
+        } catch (SQLException e) {
+            e.printStackTrace(System.out);
+        }
     }
 
     // 13
