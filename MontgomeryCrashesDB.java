@@ -190,6 +190,35 @@ public class MontgomeryCrashesDB {
                     }
                     validLogin = true;
                 } else if (line.equals("u")) { // Public User
+                    System.out.print("Welcome to the Public User System! Type h for help. ");
+                    System.out.print("db > ");
+                    line = console.nextLine();
+                    String[] parts;
+                    String arg = "";
+                    String ar2 = "";
+                    String ar3 = "";
+                    while (line != null && !line.equals("q")) {
+                        // Get arguments
+                        parts = line.split("\\s+");
+                        if (parts.length == 2) {
+                            arg = parts[1];
+                        }
+                        if (parts.length == 3) {
+                            ar2 = parts[2];
+                        }
+                        if (parts.length == 4) {
+                            ar3 = parts[3];
+                        }
+
+                        // Commands
+                        if (parts[0].equals("h")) {
+                            printPublicHelp();
+                        }
+                        // TODO: Add user queries
+
+                        System.out.print("db > ");
+                        line = console.nextLine();
+                    }
                     validLogin = true;
                 }
 
@@ -223,6 +252,29 @@ public class MontgomeryCrashesDB {
         System.out.println("violations [pid] - Lists Traffic Violations for person [personName] between [date1] and [date2]");
         System.out.println("q - quit\n");
     }
+
+    public static void printPublicHelp() {
+        // TODO: Correct for public users
+        System.out.println("tvc - List all drivers involved in collisions who were also involved in traffic violations");
+        System.out.println("typeCar [top#(1-30)] - Lists the top [number] type of cars that most often get into collisions");
+        System.out.println("injury [see below] [top#(1-30)] - Lists the top [number] type of collisions associated with [injury severity]");
+        System.out.println("\t['FATAL INJURY' / 'NO APPARENT INJURY' / 'POSSIBLE INJURY' / 'SUSPECTED MINOR INJURY' / 'SUSPECTED SERIOUS INJURY']");
+        System.out.println("nma [top#(1-30)] - Lists the top [number] non-motorist movements/actions at the time of the collision");
+        System.out.println("street - Lists the number of collisions on each street");
+        System.out.println("mc - Lists collisions involving more than two cars");
+        System.out.println("weather - Lists collisions for each weather condition");
+        System.out.println("lighting - Lists collisions for each lighting");
+        System.out.println("surface - Lists collisions for each surface condition");
+        System.out.println("speed [0/5/10/.../75] - Lists all collisions with [speedLimit] and associated collision types, and number of collisions for that collision type under that [speedLimit] ");
+        System.out.println("dbl [see below] - Lists all driver distractions with [lighting]");
+        System.out.println("\t['Dark - Lighted' / 'Dark - Not Lighted' / 'Dark - Unknown Lighting' / 'DARK UNKNOWN LIGHTING' /\n 'DARK LIGHTS ON' / 'DARK NO LIGHTS' / 'DAWN' / 'DAYLIGHT' / 'DUSK' / 'OTHER' / 'UNKNOWN']");
+        System.out.println("month [year as YYYY] - Lists number of collisions for each month in a given [year]");
+        System.out.println("collisions [pid] - Lists collision reports for person [personName] between [date1] and [date2]");
+        System.out.println("violations [pid] - Lists Traffic Violations for person [personName] between [date1] and [date2]");
+        System.out.println("q - quit\n");
+    }
+
+    
 }
 
 class MyDatabase {
@@ -268,7 +320,7 @@ class MyDatabase {
         }
     }
 
-    // ------------- Add Queries Here ----------------
+    // ------------- Queries Are Here ----------------
 
     // 1
     public void ViolationsAndCollisions() {
